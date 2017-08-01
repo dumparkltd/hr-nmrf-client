@@ -9,11 +9,11 @@ import FieldGroupWrapper from 'components/fields/FieldGroupWrapper';
 import FieldGroupLabel from 'components/fields/FieldGroupLabel';
 import GroupIcon from 'components/fields/GroupIcon';
 import Label from 'components/fields/Label';
+import Loading from 'components/Loading';
 
 class FieldGroup extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
     const { group, seemless } = this.props;
-
     return (
       <FieldGroupWrapper type={group.type} seemless={seemless}>
         { group.label &&
@@ -28,7 +28,10 @@ class FieldGroup extends React.PureComponent { // eslint-disable-line react/pref
             </Label>
           </FieldGroupLabel>
         }
-        {
+        { group.fields === 'loading' &&
+          <Loading />
+        }
+        { group.fields !== 'loading' &&
           group.fields.map((field, i) => field
             ? (<FieldFactory key={i} field={field} />)
             : null

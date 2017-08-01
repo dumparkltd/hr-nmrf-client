@@ -51,7 +51,7 @@ import {
   selectTaxonomies,
 } from './selectors';
 
-import { DEPENDENCIES } from './constants';
+import { DEPENDENCIES, RELATED_DEPENDENCIES } from './constants';
 
 export class CategoryView extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 
@@ -60,7 +60,7 @@ export class CategoryView extends React.PureComponent { // eslint-disable-line r
   }
   componentWillReceiveProps(nextProps) {
     // reload entities if invalidated
-    if (!nextProps.dataReady) {
+    if (!nextProps.dataReady || !nextProps.relatedDataReady) {
       this.props.loadEntitiesIfNeeded();
     }
   }
@@ -81,7 +81,7 @@ export class CategoryView extends React.PureComponent { // eslint-disable-line r
       ],
     }]);
 
-  getBodyMainFields = (entity, recommendations, measures, taxonomies, sdgtargets, onEntityClick, sdgtargetConnections, measureConnections, recommendationConnections) => ([
+  getBodyMainFields = (relatedDataReady, entity, recommendations, measures, taxonomies, sdgtargets, onEntityClick, sdgtargetConnections, measureConnections, recommendationConnections) => ([
     {
       fields: [
         getMarkdownField(entity, 'description', true, appMessages),
@@ -90,14 +90,14 @@ export class CategoryView extends React.PureComponent { // eslint-disable-line r
     {
       label: appMessages.entities.connections.plural,
       icon: 'connections',
-      fields: [
+      fields: relatedDataReady ? [
         entity.getIn(['taxonomy', 'attributes', 'tags_measures']) && measures &&
           getMeasureConnectionField(measures, taxonomies, measureConnections, appMessages, onEntityClick),
         entity.getIn(['taxonomy', 'attributes', 'tags_sdgtargets']) && sdgtargets &&
           getSdgTargetConnectionField(sdgtargets, taxonomies, sdgtargetConnections, appMessages, onEntityClick),
         entity.getIn(['taxonomy', 'attributes', 'tags_recommendations']) && recommendations &&
           getRecommendationConnectionField(recommendations, taxonomies, recommendationConnections, appMessages, onEntityClick),
-      ],
+      ] : 'loading',
     },
   ]);
 
@@ -123,6 +123,7 @@ export class CategoryView extends React.PureComponent { // eslint-disable-line r
     const {
       category,
       dataReady,
+      relatedDataReady,
       isManager,
       recommendations,
       measures,
@@ -181,7 +182,7 @@ export class CategoryView extends React.PureComponent { // eslint-disable-line r
                   aside: this.getHeaderAsideFields(category, isManager),
                 },
                 body: {
-                  main: this.getBodyMainFields(category, recommendations, measures, taxonomies, sdgtargets, onEntityClick, sdgtargetConnections, measureConnections, recommendationConnections),
+                  main: this.getBodyMainFields(relatedDataReady, category, recommendations, measures, taxonomies, sdgtargets, onEntityClick, sdgtargetConnections, measureConnections, recommendationConnections),
                   aside: this.getBodyAsideFields(category, isManager),
                 },
               }}
@@ -200,6 +201,7 @@ CategoryView.propTypes = {
   onEntityClick: PropTypes.func,
   category: PropTypes.object,
   dataReady: PropTypes.bool,
+  relatedDataReady: PropTypes.bool,
   params: PropTypes.object,
   isManager: PropTypes.bool,
   recommendations: PropTypes.object,
@@ -218,6 +220,7 @@ CategoryView.contextTypes = {
 const mapStateToProps = (state, props) => ({
   isManager: selectIsUserManager(state),
   dataReady: selectReady(state, { path: DEPENDENCIES }),
+  relatedDataReady: selectReady(state, { path: RELATED_DEPENDENCIES }),
   category: selectViewEntity(state, props.params.id),
   recommendations: selectRecommendations(state, props.params.id),
   measures: selectMeasures(state, props.params.id),
@@ -232,6 +235,7 @@ function mapDispatchToProps(dispatch) {
   return {
     loadEntitiesIfNeeded: () => {
       DEPENDENCIES.forEach((path) => dispatch(loadEntitiesIfNeeded(path)));
+      RELATED_DEPENDENCIES.forEach((path) => dispatch(loadEntitiesIfNeeded(path)));
     },
     onEntityClick: (id, path) => {
       dispatch(updatePath(`/${path}/${id}`));

@@ -9,6 +9,8 @@ export const DEPENDENCIES = [
   'categories',
   'users',
   'taxonomies',
+];
+export const RELATED_DEPENDENCIES = [
   'recommendations',
   'recommendation_measures',
   'recommendation_categories',

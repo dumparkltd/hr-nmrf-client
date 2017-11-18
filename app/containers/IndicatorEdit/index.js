@@ -14,35 +14,38 @@ import { actions as formActions } from 'react-redux-form/immutable';
 import { Map, List } from 'immutable';
 
 import {
-  userOptions,
+  // userOptions,
   entityOptions,
-  renderMeasureControl,
-  renderSdgTargetControl,
-  renderUserControl,
+  // renderMeasureControl,
+  // renderSdgTargetControl,
+  // renderUserControl,
+  // getConnectionUpdatesFromFormData,
+  // // getTitleFormField,
+  // getReferenceFormField,
+  // getStatusField,
+  // getMarkdownField,
+  // getDateField,
+  // getFrequencyField,
+  // getCheckboxField,
+  // getCategoryUpdatesFromFormData,
   getConnectionUpdatesFromFormData,
-  getTitleFormField,
-  getReferenceFormField,
-  getStatusField,
-  getMarkdownField,
-  getDateField,
-  getFrequencyField,
-  getCheckboxField,
+  getFields,
 } from 'utils/forms';
 
-import {
-  getMetaField,
-} from 'utils/fields';
+// import {
+//   getMetaField,
+// } from 'utils/fields';
 
 import { scrollToTop } from 'utils/scroll-to-component';
 import { hasNewError } from 'utils/entity-form';
 
 import { getCheckedValuesFromOptions } from 'components/forms/MultiSelectControl';
-import validateDateAfterDate from 'components/forms/validators/validate-date-after-date';
-import validatePresenceConditional from 'components/forms/validators/validate-presence-conditional';
-import validateRequired from 'components/forms/validators/validate-required';
+// import validateDateAfterDate from 'components/forms/validators/validate-date-after-date';
+// import validatePresenceConditional from 'components/forms/validators/validate-presence-conditional';
+// import validateRequired from 'components/forms/validators/validate-required';
 
 import { PATHS, CONTENT_SINGLE } from 'containers/App/constants';
-import { USER_ROLES } from 'themes/config';
+import { USER_ROLES, SHAPES } from 'themes/config';
 import appMessages from 'containers/App/messages';
 
 import {
@@ -68,6 +71,7 @@ import Content from 'components/Content';
 import ContentHeader from 'components/ContentHeader';
 import EntityForm from 'containers/EntityForm';
 
+import { getInitialFormData } from 'utils/entities';
 
 import {
   selectDomain,
@@ -80,7 +84,7 @@ import {
 
 import messages from './messages';
 import { save } from './actions';
-import { DEPENDENCIES, FORM_INITIAL } from './constants';
+import { DEPENDENCIES } from './constants';
 
 
 export class IndicatorEdit extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -112,7 +116,12 @@ export class IndicatorEdit extends React.Component { // eslint-disable-line reac
 
   getInitialFormData = (nextProps) => {
     const props = nextProps || this.props;
-    const { measures, viewEntity, users, sdgtargets } = props;
+    const {
+      measures,
+      viewEntity,
+      // users,
+      sdgtargets,
+    } = props;
     let attributes = viewEntity.get('attributes');
     if (!attributes.get('reference')) {
       attributes = attributes.set('reference', viewEntity.get('id'));
@@ -122,89 +131,98 @@ export class IndicatorEdit extends React.Component { // eslint-disable-line reac
       id: viewEntity.get('id'),
       attributes: attributes.mergeWith(
         (oldVal, newVal) => oldVal === null ? newVal : oldVal,
-        FORM_INITIAL.get('attributes')
+        getInitialFormData(SHAPES.INDICATORS).get('attributes')
       ),
       associatedMeasures: entityOptions(measures, true),
       associatedSdgTargets: entityOptions(sdgtargets, true),
-      associatedUser: userOptions(users, viewEntity.getIn(['attributes', 'manager_id'])),
+      // associatedUser: userOptions(users, viewEntity.getIn(['attributes', 'manager_id'])),
       // TODO allow single value for singleSelect
     })
     : Map();
   }
-
-  getHeaderMainFields = () => ([ // fieldGroups
-    { // fieldGroup
-      fields: [
-        getReferenceFormField(this.context.intl.formatMessage, appMessages, false, true),
-        getTitleFormField(this.context.intl.formatMessage, appMessages, 'titleText'),
-      ],
-    },
-  ]);
-
-  getHeaderAsideFields = (entity) => ([
-    {
-      fields: [
-        getStatusField(this.context.intl.formatMessage, appMessages, entity),
-        getMetaField(entity, appMessages),
-      ],
-    },
-  ]);
-
-  getBodyMainFields = (connectedTaxonomies, measures, sdgtargets, onCreateOption) => ([
-    {
-      fields: [getMarkdownField(this.context.intl.formatMessage, appMessages)],
-    },
-    {
-      label: this.context.intl.formatMessage(appMessages.entities.connections.plural),
-      icon: 'connections',
-      fields: [
-        renderMeasureControl(measures, connectedTaxonomies, onCreateOption),
-        renderSdgTargetControl(sdgtargets, connectedTaxonomies, onCreateOption),
-      ],
-    },
-  ]);
-
-  getBodyAsideFields = (entity, users, repeat) => ([ // fieldGroups
-    { // fieldGroup
-      label: this.context.intl.formatMessage(appMessages.entities.due_dates.schedule),
-      icon: 'reminder',
-      fields: [
-        getDateField(
-          this.context.intl.formatMessage,
-          appMessages,
-          'start_date',
-          repeat,
-          repeat ? 'start_date' : 'start_date_only',
-          (model, value) => this.props.onStartDateChange(model, value, this.props.viewDomain.form.data, this.context.intl.formatMessage)
-        ),
-        getCheckboxField(
-          this.context.intl.formatMessage,
-          appMessages,
-          'repeat',
-          entity,
-          (model, value) => this.props.onRepeatChange(model, value, this.props.viewDomain.form.data, this.context.intl.formatMessage)
-        ),
-        repeat ? getFrequencyField(this.context.intl.formatMessage, appMessages, entity) : null,
-        repeat ? getDateField(
-          this.context.intl.formatMessage,
-          appMessages,
-          'end_date',
-          repeat,
-          'end_date',
-          (model, value) => this.props.onEndDateChange(model, value, this.props.viewDomain.form.data, this.context.intl.formatMessage)
-        )
-        : null,
-        renderUserControl(
-          users,
-          this.context.intl.formatMessage(appMessages.attributes.manager_id.indicators),
-          entity.getIn(['attributes', 'manager_id']),
-        ),
-      ],
-    },
-  ]);
+  //
+  // getHeaderMainFields = () => ([ // fieldGroups
+  //   { // fieldGroup
+  //     fields: [
+  //       getReferenceFormField(this.context.intl.formatMessage, appMessages, false, true),
+  //       getTitleFormField(this.context.intl.formatMessage, appMessages, 'titleText'),
+  //     ],
+  //   },
+  // ]);
+  //
+  // getHeaderAsideFields = (entity) => ([
+  //   {
+  //     fields: [
+  //       getStatusField(this.context.intl.formatMessage, appMessages, entity),
+  //       getMetaField(entity, appMessages),
+  //     ],
+  //   },
+  // ]);
+  //
+  // getBodyMainFields = (connectedTaxonomies, measures, sdgtargets, onCreateOption) => ([
+  //   {
+  //     fields: [getMarkdownField(this.context.intl.formatMessage, appMessages)],
+  //   },
+  //   {
+  //     label: this.context.intl.formatMessage(appMessages.entities.connections.plural),
+  //     icon: 'connections',
+  //     fields: [
+  //       renderMeasureControl(measures, connectedTaxonomies, onCreateOption),
+  //       renderSdgTargetControl(sdgtargets, connectedTaxonomies, onCreateOption),
+  //     ],
+  //   },
+  // ]);
+  //
+  // getBodyAsideFields = (entity, users, repeat) => ([ // fieldGroups
+  //   { // fieldGroup
+  //     label: this.context.intl.formatMessage(appMessages.entities.due_dates.schedule),
+  //     icon: 'reminder',
+  //     fields: [
+  //       getDateField(
+  //         this.context.intl.formatMessage,
+  //         appMessages,
+  //         'start_date',
+  //         repeat,
+  //         repeat ? 'start_date' : 'start_date_only',
+  //         (model, value) => this.props.onStartDateChange(model, value, this.props.viewDomain.form.data, this.context.intl.formatMessage)
+  //       ),
+  //       getCheckboxField(
+  //         this.context.intl.formatMessage,
+  //         appMessages,
+  //         'repeat',
+  //         entity,
+  //         (model, value) => this.props.onRepeatChange(model, value, this.props.viewDomain.form.data, this.context.intl.formatMessage)
+  //       ),
+  //       repeat ? getFrequencyField(this.context.intl.formatMessage, appMessages, entity) : null,
+  //       repeat ? getDateField(
+  //         this.context.intl.formatMessage,
+  //         appMessages,
+  //         'end_date',
+  //         repeat,
+  //         'end_date',
+  //         (model, value) => this.props.onEndDateChange(model, value, this.props.viewDomain.form.data, this.context.intl.formatMessage)
+  //       )
+  //       : null,
+  //       renderUserControl(
+  //         users,
+  //         this.context.intl.formatMessage(appMessages.attributes.manager_id.indicators),
+  //         entity.getIn(['attributes', 'manager_id']),
+  //       ),
+  //     ],
+  //   },
+  // ]);
 
   render() {
-    const { viewEntity, dataReady, viewDomain, connectedTaxonomies, measures, users, sdgtargets, onCreateOption } = this.props;
+    const {
+      viewEntity,
+      dataReady,
+      viewDomain,
+      connectedTaxonomies,
+      measures,
+      users,
+      sdgtargets,
+      onCreateOption,
+    } = this.props;
     const { saveSending, saveError, deleteSending, deleteError, submitValid } = viewDomain.page;
 
     return (
@@ -267,24 +285,40 @@ export class IndicatorEdit extends React.Component { // eslint-disable-line reac
               handleCancel={this.props.handleCancel}
               handleUpdate={this.props.handleUpdate}
               handleDelete={this.props.isUserAdmin ? this.props.handleDelete : null}
-              validators={{
-                '': {
-                  // Form-level validator
-                  endDatePresent: (vals) => validatePresenceConditional(vals.getIn(['attributes', 'repeat']), vals.getIn(['attributes', 'end_date'])),
-                  startDatePresent: (vals) => validatePresenceConditional(vals.getIn(['attributes', 'repeat']), vals.getIn(['attributes', 'start_date'])),
-                  endDateAfterStartDate: (vals) => vals.getIn(['attributes', 'repeat']) ? validateDateAfterDate(vals.getIn(['attributes', 'end_date']), vals.getIn(['attributes', 'start_date'])) : true,
+              // validators={
+              //   {
+              //   '': {
+              //     // Form-level validator
+              //     endDatePresent: (vals) => validatePresenceConditional(vals.getIn(['attributes', 'repeat']), vals.getIn(['attributes', 'end_date'])),
+              //     startDatePresent: (vals) => validatePresenceConditional(vals.getIn(['attributes', 'repeat']), vals.getIn(['attributes', 'start_date'])),
+              //     endDateAfterStartDate: (vals) => vals.getIn(['attributes', 'repeat']) ? validateDateAfterDate(vals.getIn(['attributes', 'end_date']), vals.getIn(['attributes', 'start_date'])) : true,
+              //   },
+              // }
+              // }
+              fields={getFields({
+                entity: viewEntity,
+                associations: {
+                  connectedTaxonomies,
+                  measures,
+                  sdgtargets,
+                  users,
                 },
-              }}
-              fields={{
-                header: {
-                  main: this.getHeaderMainFields(),
-                  aside: this.getHeaderAsideFields(viewEntity),
-                },
-                body: {
-                  main: this.getBodyMainFields(connectedTaxonomies, measures, sdgtargets, onCreateOption),
-                  aside: this.getBodyAsideFields(viewEntity, users, viewDomain.form.data.getIn(['attributes', 'repeat'])),
-                },
-              }}
+                onCreateOption,
+                shape: SHAPES.INDICATORS,
+                formatMessage: this.context.intl.formatMessage,
+                onChange: null, // fieldChange,
+                formData: this.props.viewDomain.form.data,
+              })}
+              // fields={{
+              //   header: {
+              //     main: this.getHeaderMainFields(),
+              //     aside: this.getHeaderAsideFields(viewEntity),
+              //   },
+              //   body: {
+              //     main: this.getBodyMainFields(connectedTaxonomies, measures, sdgtargets, onCreateOption),
+              //     aside: this.getBodyAsideFields(viewEntity, users, viewDomain.form.data.getIn(['attributes', 'repeat'])),
+              //   },
+              // }}
             />
           }
           { (saveSending || deleteSending) &&
@@ -319,9 +353,9 @@ IndicatorEdit.propTypes = {
   connectedTaxonomies: PropTypes.object,
   users: PropTypes.object,
   onCreateOption: PropTypes.func,
-  onRepeatChange: PropTypes.func,
-  onStartDateChange: PropTypes.func,
-  onEndDateChange: PropTypes.func,
+  // onRepeatChange: PropTypes.func,
+  // onStartDateChange: PropTypes.func,
+  // onEndDateChange: PropTypes.func,
 };
 
 IndicatorEdit.contextTypes = {
@@ -353,65 +387,73 @@ function mapDispatchToProps(dispatch, props) {
       dispatch(formActions.reset(model));
       dispatch(formActions.change(model, formData, { silent: true }));
     },
-    onRepeatChange: (repeatModel, repeat, formData, formatMessage) => {
-      // reset repeat erros when repeat turned off
-      if (!repeat) {
-        dispatch(formActions.setErrors('indicatorEdit.form.data.attributes.start_date', {
-          required: false,
-          startDateAfterEndDateError: false,
-        }));
-        dispatch(formActions.setErrors('indicatorEdit.form.data.attributes.end_date', {
-          required: false,
-          endDateBeforeStartDateError: false,
-        }));
-      } else if (validateRequired(formData.getIn(['attributes', 'start_date']))
-        && validateRequired(formData.getIn(['attributes', 'end_date']))
-        && !validateDateAfterDate(formData.getIn(['attributes', 'end_date']), formData.getIn(['attributes', 'start_date']))
-      ) {
-        dispatch(formActions.setErrors(
-          'indicatorEdit.form.data.attributes.start_date',
-          { startDateAfterEndDateError: formatMessage(appMessages.forms.startDateAfterEndDateError) }
-        ));
-        dispatch(formActions.setErrors(
-          'indicatorEdit.form.data.attributes.end_date',
-          { endDateBeforeStartDateError: formatMessage(appMessages.forms.endDateBeforeStartDateError) }
-        ));
-      }
-      dispatch(formActions.change(repeatModel, repeat));
-    },
-    onStartDateChange: (dateModel, dateValue, formData, formatMessage) => {
-      // validateDateAfterDate if repeat and both dates present
-      if (formData.getIn(['attributes', 'repeat'])
-        && validateRequired(formData.getIn(['attributes', 'end_date']))
-        && validateRequired(dateValue)
-        && !validateDateAfterDate(formData.getIn(['attributes', 'end_date']), dateValue)
-      ) {
-        dispatch(formActions.setErrors(
-          'indicatorEdit.form.data.attributes.start_date',
-          { startDateAfterEndDateError: formatMessage(appMessages.forms.startDateAfterEndDateError) }
-        ));
-      } else {
-        dispatch(formActions.setErrors('indicatorEdit.form.data.attributes.start_date', { startDateAfterEndDateError: false }));
-        dispatch(formActions.setErrors('indicatorEdit.form.data.attributes.end_date', { endDateBeforeStartDateError: false }));
-      }
-      dispatch(formActions.change(dateModel, dateValue));
-    },
-    onEndDateChange: (dateModel, dateValue, formData, formatMessage) => {
-      if (formData.getIn(['attributes', 'repeat'])
-        && validateRequired(dateValue)
-        && validateRequired(formData.getIn(['attributes', 'start_date']))
-        && !validateDateAfterDate(dateValue, formData.getIn(['attributes', 'start_date']))
-      ) {
-        dispatch(formActions.setErrors(
-          'indicatorEdit.form.data.attributes.end_date',
-          { endDateBeforeStartDateError: formatMessage(appMessages.forms.endDateBeforeStartDateError) }
-        ));
-      } else {
-        dispatch(formActions.setErrors('indicatorEdit.form.data.attributes.end_date', { endDateBeforeStartDateError: false }));
-        dispatch(formActions.setErrors('indicatorEdit.form.data.attributes.start_date', { startDateAfterEndDateError: false }));
-      }
-      dispatch(formActions.change(dateModel, dateValue));
-    },
+    // fieldChange: (model, value, errors) => {
+    //   if (errors) {
+    //     map(errors, (error) => {
+    //       dispatch(formActions.setErrors(error.model, error.errors));
+    //     })
+    //   }
+    //   dispatch(formActions.change(model, value));
+    // }
+    // onRepeatChange: (repeatModel, repeat, formData, formatMessage) => {
+    //   // reset repeat erros when repeat turned off
+    //   if (!repeat) {
+    //     dispatch(formActions.setErrors('indicatorEdit.form.data.attributes.start_date', {
+    //       required: false,
+    //       startDateAfterEndDateError: false,
+    //     }));
+    //     dispatch(formActions.setErrors('indicatorEdit.form.data.attributes.end_date', {
+    //       required: false,
+    //       endDateBeforeStartDateError: false,
+    //     }));
+    //   } else if (validateRequired(formData.getIn(['attributes', 'start_date']))
+    //     && validateRequired(formData.getIn(['attributes', 'end_date']))
+    //     && !validateDateAfterDate(formData.getIn(['attributes', 'end_date']), formData.getIn(['attributes', 'start_date']))
+    //   ) {
+    //     dispatch(formActions.setErrors(
+    //       'indicatorEdit.form.data.attributes.start_date',
+    //       { startDateAfterEndDateError: formatMessage(appMessages.forms.startDateAfterEndDateError) }
+    //     ));
+    //     dispatch(formActions.setErrors(
+    //       'indicatorEdit.form.data.attributes.end_date',
+    //       { endDateBeforeStartDateError: formatMessage(appMessages.forms.endDateBeforeStartDateError) }
+    //     ));
+    //   }
+    //   dispatch(formActions.change(repeatModel, repeat));
+    // },
+    // onStartDateChange: (dateModel, dateValue, formData, formatMessage) => {
+    //   // validateDateAfterDate if repeat and both dates present
+    //   if (formData.getIn(['attributes', 'repeat'])
+    //     && validateRequired(formData.getIn(['attributes', 'end_date']))
+    //     && validateRequired(dateValue)
+    //     && !validateDateAfterDate(formData.getIn(['attributes', 'end_date']), dateValue)
+    //   ) {
+    //     dispatch(formActions.setErrors(
+    //       'indicatorEdit.form.data.attributes.start_date',
+    //       { startDateAfterEndDateError: formatMessage(appMessages.forms.startDateAfterEndDateError) }
+    //     ));
+    //   } else {
+    //     dispatch(formActions.setErrors('indicatorEdit.form.data.attributes.start_date', { startDateAfterEndDateError: false }));
+    //     dispatch(formActions.setErrors('indicatorEdit.form.data.attributes.end_date', { endDateBeforeStartDateError: false }));
+    //   }
+    //   dispatch(formActions.change(dateModel, dateValue));
+    // },
+    // onEndDateChange: (dateModel, dateValue, formData, formatMessage) => {
+    //   if (formData.getIn(['attributes', 'repeat'])
+    //     && validateRequired(dateValue)
+    //     && validateRequired(formData.getIn(['attributes', 'start_date']))
+    //     && !validateDateAfterDate(dateValue, formData.getIn(['attributes', 'start_date']))
+    //   ) {
+    //     dispatch(formActions.setErrors(
+    //       'indicatorEdit.form.data.attributes.end_date',
+    //       { endDateBeforeStartDateError: formatMessage(appMessages.forms.endDateBeforeStartDateError) }
+    //     ));
+    //   } else {
+    //     dispatch(formActions.setErrors('indicatorEdit.form.data.attributes.end_date', { endDateBeforeStartDateError: false }));
+    //     dispatch(formActions.setErrors('indicatorEdit.form.data.attributes.start_date', { startDateAfterEndDateError: false }));
+    //   }
+    //   dispatch(formActions.change(dateModel, dateValue));
+    // },
     onErrorDismiss: () => {
       dispatch(submitInvalid(true));
     },

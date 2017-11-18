@@ -1,6 +1,7 @@
 import { Map, List } from 'immutable';
 
-import { filter, reduce } from 'lodash/collection';
+import { filter, reduce, groupBy, map } from 'lodash/collection';
+import { get } from 'lodash/object';
 
 import {
   getEntityTitle,
@@ -711,16 +712,38 @@ export const getEntityFields = (path, args, formatMessage) => {
 };
 
 
-const getSectionFields = (shape, section, column, entity, associations, onCreateOption, formatMessage) => {
+const getSectionFields = (shape, section, column, entity, associations, onCreateOption, formatMessage, onChange, formData) => {
   const fields = filter(shape.fields, (field) =>
     field.section === section
     && field.column === column
     && !field.disabled
+    && (typeof field.hidden !== 'undefined'
+      ? !field.hidden(formData.get('attributes'))
+      : true
+    )
   );
-  const sectionGroups = [{
-    fields: reduce(fields, (memo, field) => {
+  const groups = groupBy(fields, (field) => field.group || 'default');
+  const sectionGroups = map(groups, (groupFields, group) => ({
+    icon: shape.attributeGroups && shape.attributeGroups[group]
+      ? shape.attributeGroups[group].icon
+      : null,
+    label: shape.attributeGroups
+      && shape.attributeGroups[group]
+      && get(appMessages, shape.attributeGroups[group].message)
+      ? formatMessage(get(appMessages, shape.attributeGroups[group].message))
+      : null,
+    fields: reduce(groupFields, (memo, field) => {
+      // const onFieldChange = (typeof field.validate !== 'undefined' || typeof field.validateFields !== 'undefined')
+      // ? getOnFieldChange(field, shape, entity, formatMessage, onChange, formData)
+      // : null;
+      // if (typeof field.validateFields !== 'undefined') {
+      //
+      // }
       if (field.control === 'title') {
         return memo.concat([getTitleFormField(formatMessage)]);
+      }
+      if (field.control === 'titleText') {
+        return memo.concat([getTitleFormField(formatMessage, null, field.control)]);
       }
       if (field.control === 'status') {
         return memo.concat([getStatusField(formatMessage, null, entity)]);
@@ -731,13 +754,19 @@ const getSectionFields = (shape, section, column, entity, associations, onCreate
       if (field.control === 'markdown') {
         return memo.concat([getMarkdownField(formatMessage, null, field.attribute)]);
       }
+      if (field.control === 'reference') {
+        return memo.concat([getReferenceFormField(formatMessage, null, field.required, field.isAutoReference)]);
+      }
+      if (field.control === 'checkbox') {
+        return memo.concat([getCheckboxField(formatMessage, null, field.attribute, entity)]);
+      }
       return memo.concat([getFormField({
         controlType: field.control,
         attribute: field.attribute,
         formatMessage,
       })]);
     }, []),
-  }];
+  }));
   if (associations && associations.taxonomies && shape.taxonomies && shape.taxonomies.section === section && shape.taxonomies.column === column) {
     sectionGroups.push({ // fieldGroup
       label: formatMessage(appMessages.entities.taxonomies.plural),
@@ -795,6 +824,8 @@ export const getFields = ({
   onCreateOption,
   shape,
   formatMessage,
+  onChange,
+  formData,
 }) => ({
   header: {
     main: getSectionFields(
@@ -804,7 +835,9 @@ export const getFields = ({
       entity,
       associations,
       onCreateOption,
-      formatMessage
+      formatMessage,
+      onChange,
+      formData
     ),
     aside: getSectionFields(
       shape,
@@ -813,7 +846,9 @@ export const getFields = ({
       entity,
       associations,
       onCreateOption,
-      formatMessage
+      formatMessage,
+      onChange,
+      formData
     ),
   },
   body: {
@@ -824,7 +859,9 @@ export const getFields = ({
       entity,
       associations,
       onCreateOption,
-      formatMessage
+      formatMessage,
+      onChange,
+      formData
     ),
     aside: getSectionFields(
       shape,
@@ -833,7 +870,9 @@ export const getFields = ({
       entity,
       associations,
       onCreateOption,
-      formatMessage
+      formatMessage,
+      onChange,
+      formData
     ),
   },
 });

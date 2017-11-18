@@ -20,7 +20,7 @@ import { hasNewError } from 'utils/entity-form';
 import { getCheckedValuesFromOptions } from 'components/forms/MultiSelectControl';
 
 import { PATHS, CONTENT_SINGLE } from 'containers/App/constants';
-import { USER_ROLES, MEASURE_SHAPE } from 'themes/config';
+import { USER_ROLES, SHAPES } from 'themes/config';
 
 import {
   loadEntitiesIfNeeded,
@@ -62,7 +62,7 @@ export class ActionNew extends React.PureComponent { // eslint-disable-line reac
 
   componentWillMount() {
     this.props.loadEntitiesIfNeeded();
-    this.props.initialiseForm('measureNew.form.data', getInitialFormData(MEASURE_SHAPE));
+    this.props.initialiseForm('measureNew.form.data', getInitialFormData(SHAPES.MEASURES));
   }
 
   componentWillReceiveProps(nextProps) {
@@ -144,7 +144,7 @@ export class ActionNew extends React.PureComponent { // eslint-disable-line reac
                   sdgtargets,
                 },
                 onCreateOption,
-                shape: MEASURE_SHAPE,
+                shape: SHAPES.MEASURES,
                 formatMessage: this.context.intl.formatMessage,
               })}
             />

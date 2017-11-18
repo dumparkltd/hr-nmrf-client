@@ -9,9 +9,11 @@ import { combineForms } from 'react-redux-form/immutable';
 
 import { entityFormReducer } from 'containers/App/entityFormReducer';
 import { UPDATE_ENTITY_FORM } from 'containers/App/constants';
-import { FORM_INITIAL } from './constants';
+import { SHAPES } from 'themes/config';
+import { getInitialFormData } from 'utils/entities';
 
-function formReducer(state = FORM_INITIAL, action) {
+function formReducer(s, action) {
+  const state = s || getInitialFormData(SHAPES.INDICATORS);
   switch (action.type) {
     case UPDATE_ENTITY_FORM:
       return action.data;

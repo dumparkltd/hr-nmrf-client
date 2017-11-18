@@ -15,7 +15,7 @@ import { getFields } from 'utils/fields';
 import { loadEntitiesIfNeeded, updatePath, closeEntity } from 'containers/App/actions';
 
 import { PATHS, CONTENT_SINGLE } from 'containers/App/constants';
-import { MEASURE_SHAPE, USER_ROLES } from 'themes/config';
+import { SHAPES, USER_ROLES } from 'themes/config';
 
 import Loading from 'components/Loading';
 import Content from 'components/Content';
@@ -129,7 +129,7 @@ export class ActionView extends React.PureComponent { // eslint-disable-line rea
                   sdgtargetConnections,
                 },
                 onEntityClick,
-                shape: MEASURE_SHAPE,
+                shape: SHAPES.MEASURES,
               })}
             />
           }

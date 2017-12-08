@@ -59,11 +59,11 @@ export const CONFIG = {
         message: 'entities.recommendations.plural',
         key: 'recommendation_id',
       },
-      {
-        path: 'sdgtargets', // filter by recommendation connection
-        message: 'entities.sdgtargets.plural',
-        key: 'sdgtarget_id',
-      },
+      // {
+      //   path: 'sdgtargets', // filter by recommendation connection
+      //   message: 'entities.sdgtargets.plural',
+      //   key: 'sdgtarget_id',
+      // },
     ],
   },
   connections: { // filter by associated entity
@@ -86,14 +86,14 @@ export const CONFIG = {
         connectPath: 'recommendation_measures', // filter by recommendation connection
         ownKey: 'measure_id',
       },
-      {
-        search: true,
-        message: 'entities.sdgtargets.plural',
-        path: 'sdgtargets', // filter by recommendation connection
-        key: 'sdgtarget_id',
-        connectPath: 'sdgtarget_measures', // filter by recommendation connection
-        ownKey: 'measure_id',
-      },
+      // {
+      //   search: true,
+      //   message: 'entities.sdgtargets.plural',
+      //   path: 'sdgtargets', // filter by recommendation connection
+      //   key: 'sdgtarget_id',
+      //   connectPath: 'sdgtarget_measures', // filter by recommendation connection
+      //   ownKey: 'measure_id',
+      // },
     ],
   },
   attributes: {  // filter by attribute value

@@ -14,6 +14,7 @@ import { palette } from 'styled-theme';
 import styled from 'styled-components';
 
 import { mapToTaxonomyList } from 'utils/taxonomies';
+import { ACTIVE_SDG } from 'themes/config';
 
 // containers
 import { loadEntitiesIfNeeded, updatePath } from 'containers/App/actions';
@@ -118,7 +119,7 @@ const Annotation = styled.div`
   margin-top: -2em;
 `;
 const Addressed = styled(Annotation)`
-  left: 33%;
+  left: ${(props) => props.hasSDGs ? 33 : 31}%;
 `;
 const Measured = styled(Annotation)`
   left: 69%;
@@ -355,11 +356,16 @@ export class Overview extends React.PureComponent { // eslint-disable-line react
       indicatorDraftCount,
     } = this.props;
 
-    const connectRecommendationsMeasures = this.state.buttonRecs && this.state.buttonMeasures && this.state.diagram &&
-      this.getCurvedConnectionPath(
+    const connectRecommendationsMeasures = this.state.buttonRecs && this.state.buttonMeasures && this.state.diagram && (ACTIVE_SDG
+      ? this.getCurvedConnectionPath(
         this.getConnectionPoint(this.state.buttonRecs, this.state.diagram, 'right'),
         this.getConnectionPoint(this.state.buttonMeasures, this.state.diagram, 'left'),
-      );
+      )
+      : this.getConnectionPath(
+        this.getConnectionPoint(this.state.buttonRecs, this.state.diagram, 'right'),
+        this.getConnectionPoint(this.state.buttonMeasures, this.state.diagram, 'left'),
+      )
+    );
     const connectSdgtargetsMeasures = this.state.buttonSdgtargets && this.state.buttonMeasures && this.state.diagram &&
       this.getCurvedConnectionPath(
         this.getConnectionPoint(this.state.buttonSdgtargets, this.state.diagram, 'right'),
@@ -430,7 +436,7 @@ export class Overview extends React.PureComponent { // eslint-disable-line react
                         width={this.state.diagram.getBoundingClientRect().width}
                         height={this.state.diagram.getBoundingClientRect().height}
                       >
-                        {connectSdgtargetsIndicators &&
+                        {ACTIVE_SDG && connectSdgtargetsIndicators &&
                           <PathLineCustom
                             points={connectSdgtargetsIndicators}
                             strokeDasharray="5,5"
@@ -449,7 +455,7 @@ export class Overview extends React.PureComponent { // eslint-disable-line react
                             r={0}
                           />
                         }
-                        {connectSdgtargetsMeasures &&
+                        {ACTIVE_SDG && connectSdgtargetsMeasures &&
                           <PathLineCustom
                             points={connectSdgtargetsMeasures}
                             r={20}
@@ -471,78 +477,125 @@ export class Overview extends React.PureComponent { // eslint-disable-line react
                     }
                   </DiagramSvgWrapper>
                   <DiagramLeft>
-                    <DiagramTop>
-                      <DiagramButtonWrap>
-                        <DiagramButton
-                          onClick={() => onPageLink(PATHS.RECOMMENDATIONS)}
-                          palette={'recommendations'}
-                          paletteHover={'recommendationsHover'}
-                          innerRef={(node) => {
-                            if (!this.state.buttonRecs) {
-                              this.setState({ buttonRecs: node });
+                    { ACTIVE_SDG &&
+                      <DiagramTop>
+                        <DiagramButtonWrap>
+                          <DiagramButton
+                            onClick={() => onPageLink(PATHS.RECOMMENDATIONS)}
+                            palette={'recommendations'}
+                            paletteHover={'recommendationsHover'}
+                            innerRef={(node) => {
+                              if (!this.state.buttonRecs) {
+                                this.setState({ buttonRecs: node });
+                              }
+                            }}
+                          >
+                            <DiagramButtonIcon>
+                              <Icon name="recommendations" />
+                            </DiagramButtonIcon>
+                            <div>
+                              <FormattedMessage {...messages.buttons.recommendations} values={{ count: recommendationCount }} />
+                            </div>
+                            { recommendationDraftCount > 0 &&
+                              <DraftEntities>
+                                <FormattedMessage {...messages.buttons.draft} values={{ count: recommendationDraftCount }} />
+                              </DraftEntities>
                             }
-                          }}
-                        >
-                          <DiagramButtonIcon>
-                            <Icon name="recommendations" />
-                          </DiagramButtonIcon>
-                          <div>
-                            <FormattedMessage {...messages.buttons.recommendations} values={{ count: recommendationCount }} />
-                          </div>
-                          { recommendationDraftCount > 0 &&
-                            <DraftEntities>
-                              <FormattedMessage {...messages.buttons.draft} values={{ count: recommendationDraftCount }} />
-                            </DraftEntities>
+                          </DiagramButton>
+                          { this.getTaxonomiesByTagging(taxonomies, 'tags_recommendations').size > 0 &&
+                            <Categorised>
+                              <FormattedMessage {...messages.diagram.categorised} />
+                              {
+                                this.renderTaxonomyIcons(
+                                  this.getTaxonomiesByTagging(taxonomies, 'tags_recommendations'),
+                                  this.state.mouseOverTaxonomy || this.state.mouseOverTaxonomyDiagram
+                                )
+                              }
+                            </Categorised>
                           }
-                        </DiagramButton>
-                        <Categorised>
-                          <FormattedMessage {...messages.diagram.categorised} />
-                          {
-                            this.renderTaxonomyIcons(
-                              this.getTaxonomiesByTagging(taxonomies, 'tags_recommendations'),
-                              this.state.mouseOverTaxonomy || this.state.mouseOverTaxonomyDiagram
-                            )
-                          }
-                        </Categorised>
-                      </DiagramButtonWrap>
-                    </DiagramTop>
-                    <DiagramBottom>
-                      <DiagramButtonWrap>
-                        <DiagramButton
-                          onClick={() => onPageLink(PATHS.SDG_TARGETS)}
-                          palette={'sdgtargets'}
-                          paletteHover={'sdgtargetsHover'}
-                          innerRef={(node) => {
-                            if (!this.state.buttonSdgtargets) {
-                              this.setState({ buttonSdgtargets: node });
+                        </DiagramButtonWrap>
+                      </DiagramTop>
+                    }
+                    { !ACTIVE_SDG &&
+                      <DiagramVCenter>
+                        <DiagramButtonWrap>
+                          <DiagramButton
+                            onClick={() => onPageLink(PATHS.RECOMMENDATIONS)}
+                            palette={'recommendations'}
+                            paletteHover={'recommendationsHover'}
+                            innerRef={(node) => {
+                              if (!this.state.buttonRecs) {
+                                this.setState({ buttonRecs: node });
+                              }
+                            }}
+                          >
+                            <DiagramButtonIcon>
+                              <Icon name="recommendations" />
+                            </DiagramButtonIcon>
+                            <div>
+                              <FormattedMessage {...messages.buttons.recommendations} values={{ count: recommendationCount }} />
+                            </div>
+                            { recommendationDraftCount > 0 &&
+                              <DraftEntities>
+                                <FormattedMessage {...messages.buttons.draft} values={{ count: recommendationDraftCount }} />
+                              </DraftEntities>
                             }
-                          }}
-                        >
-                          <DiagramButtonIcon>
-                            <Icon name="sdgtargets" />
-                          </DiagramButtonIcon>
-                          <div>
-                            <FormattedMessage {...messages.buttons.sdgtargets} values={{ count: sdgtargetCount }} />
-                          </div>
-                          { sdgtargetDraftCount > 0 &&
-                            <DraftEntities>
-                              <FormattedMessage {...messages.buttons.draft} values={{ count: sdgtargetDraftCount }} />
-                            </DraftEntities>
+                          </DiagramButton>
+                          { this.getTaxonomiesByTagging(taxonomies, 'tags_recommendations').size > 0 &&
+                            <Categorised>
+                              <FormattedMessage {...messages.diagram.categorised} />
+                              {
+                                this.renderTaxonomyIcons(
+                                  this.getTaxonomiesByTagging(taxonomies, 'tags_recommendations'),
+                                  this.state.mouseOverTaxonomy || this.state.mouseOverTaxonomyDiagram
+                                )
+                              }
+                            </Categorised>
                           }
-                        </DiagramButton>
-                        <Categorised>
-                          <FormattedMessage {...messages.diagram.categorised} />
-                          {
-                            this.renderTaxonomyIcons(
-                              this.getTaxonomiesByTagging(taxonomies, 'tags_sdgtargets'),
-                              this.state.mouseOverTaxonomy || this.state.mouseOverTaxonomyDiagram
-                            )
+                        </DiagramButtonWrap>
+                      </DiagramVCenter>
+                    }
+                    { ACTIVE_SDG &&
+                      <DiagramBottom>
+                        <DiagramButtonWrap>
+                          <DiagramButton
+                            onClick={() => onPageLink(PATHS.SDG_TARGETS)}
+                            palette={'sdgtargets'}
+                            paletteHover={'sdgtargetsHover'}
+                            innerRef={(node) => {
+                              if (!this.state.buttonSdgtargets) {
+                                this.setState({ buttonSdgtargets: node });
+                              }
+                            }}
+                          >
+                            <DiagramButtonIcon>
+                              <Icon name="sdgtargets" />
+                            </DiagramButtonIcon>
+                            <div>
+                              <FormattedMessage {...messages.buttons.sdgtargets} values={{ count: sdgtargetCount }} />
+                            </div>
+                            { sdgtargetDraftCount > 0 &&
+                              <DraftEntities>
+                                <FormattedMessage {...messages.buttons.draft} values={{ count: sdgtargetDraftCount }} />
+                              </DraftEntities>
+                            }
+                          </DiagramButton>
+                          { this.getTaxonomiesByTagging(taxonomies, 'tags_sdgtargets').size > 0 &&
+                            <Categorised>
+                              <FormattedMessage {...messages.diagram.categorised} />
+                              {
+                                this.renderTaxonomyIcons(
+                                  this.getTaxonomiesByTagging(taxonomies, 'tags_sdgtargets'),
+                                  this.state.mouseOverTaxonomy || this.state.mouseOverTaxonomyDiagram
+                                )
+                              }
+                            </Categorised>
                           }
-                        </Categorised>
-                      </DiagramButtonWrap>
-                    </DiagramBottom>
+                        </DiagramButtonWrap>
+                      </DiagramBottom>
+                    }
                   </DiagramLeft>
-                  <Addressed>
+                  <Addressed hasSDGs={ACTIVE_SDG}>
                     <FormattedMessage {...messages.diagram.addressed} />
                   </Addressed>
                   <DiagramHCenter>
@@ -575,15 +628,17 @@ export class Overview extends React.PureComponent { // eslint-disable-line react
                             }
                           </DiagramButtonMainInside>
                         </DiagramButtonMain>
-                        <Categorised>
-                          <FormattedMessage {...messages.diagram.categorised} />
-                          {
-                            this.renderTaxonomyIcons(
-                              this.getTaxonomiesByTagging(taxonomies, 'tags_measures'),
-                              this.state.mouseOverTaxonomy || this.state.mouseOverTaxonomyDiagram
-                            )
-                          }
-                        </Categorised>
+                        { this.getTaxonomiesByTagging(taxonomies, 'tags_measures').size > 0 &&
+                          <Categorised>
+                            <FormattedMessage {...messages.diagram.categorised} />
+                            {
+                              this.renderTaxonomyIcons(
+                                this.getTaxonomiesByTagging(taxonomies, 'tags_measures'),
+                                this.state.mouseOverTaxonomy || this.state.mouseOverTaxonomyDiagram
+                              )
+                            }
+                          </Categorised>
+                        }
                       </DiagramButtonWrap>
                     </DiagramVCenter>
                   </DiagramHCenter>

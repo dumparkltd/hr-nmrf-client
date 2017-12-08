@@ -130,7 +130,7 @@ const selectMeasuresNested = createSelector(
     // nest connected sdgtarget ids
     .set(
       'sdgtargets',
-      measureSdgTargets
+      measureSdgTargets && measureSdgTargets
       .filter((association) =>
         attributesEqual(association.getIn(['attributes', 'measure_id']), entity.get('id'))
         && connections.getIn(['sdgtargets', association.getIn(['attributes', 'sdgtarget_id']).toString()])

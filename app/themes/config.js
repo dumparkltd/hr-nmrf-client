@@ -71,6 +71,10 @@ export const TAXONOMY_GROUPS = [
   },
 ];
 
+export const INACTIVE_TAXONOMIES = [3, 4, 6, 7, 8, 9];
+
+export const ACTIVE_SDG = false;
+
 /**
  * Server settings
  **/
@@ -160,10 +164,10 @@ export const DB_TABLES = [
   'recommendation_categories',
   'recommendation_measures',
   'recommendations',
-  'sdgtarget_categories',
-  'sdgtarget_indicators',
-  'sdgtarget_measures',
-  'sdgtargets',
+  // 'sdgtarget_categories',
+  // 'sdgtarget_indicators',
+  // 'sdgtarget_measures',
+  // 'sdgtargets',
   'user_categories',
   'progress_reports',
   'due_dates',

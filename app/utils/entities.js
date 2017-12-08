@@ -56,7 +56,7 @@ export const getConnectedCategories = (entityConnectedIds, taxonomyCategories, p
 // filter entities by absence of association either by taxonomy id or connection type
 // assumes prior nesting of relationships
 export const filterEntitiesWithoutAssociation = (entities, categories, query) =>
-  entities.filter((entity) =>
+  entities && entities.filter((entity) =>
     asList(query).reduce((passing, pathOrTax) =>
       passing && !(isNumber(pathOrTax)
         ? testEntityTaxonomyAssociation(entity, categories, parseInt(pathOrTax, 10))
@@ -68,7 +68,7 @@ export const filterEntitiesWithoutAssociation = (entities, categories, query) =>
 // filter entities by association with one or more categories
 // assumes prior nesting of relationships
 export const filterEntitiesByCategories = (entities, query) =>
-  entities.filter((entity) =>
+  entities && entities.filter((entity) =>
     asList(query).reduce((passing, categoryId) =>
       passing && testEntityCategoryAssociation(entity, parseInt(categoryId, 10))
     , true)
@@ -77,7 +77,7 @@ export const filterEntitiesByCategories = (entities, query) =>
 // filter entities by association with one or more categories
 // assumes prior nesting of relationships
 export const filterEntitiesByConnectedCategories = (entities, connections, query) =>
-  entities.filter((entity) =>
+  entities && entities.filter((entity) =>
     asList(query).reduce((passing, queryArg) => {
       const pathValue = queryArg.split(':');
       const path = pathValue[0];
@@ -99,7 +99,7 @@ export const filterEntitiesByConnectedCategories = (entities, connections, query
 // filter entities by by association with one or more entities of specific connection type
 // assumes prior nesting of relationships
 export const filterEntitiesByConnection = (entities, query) =>
-  entities.filter((entity) =>
+  entities && entities.filter((entity) =>
     asList(query).reduce((passing, queryArg) => {
       const pathValue = queryArg.split(':');
       const path = pathValue[0];
@@ -111,7 +111,7 @@ export const filterEntitiesByConnection = (entities, query) =>
 
 // query is object not string!
 export const filterEntitiesByAttributes = (entities, query) =>
-  entities.filter((entity) =>
+  entities && entities.filter((entity) =>
     reduce(query, (passing, value, attribute) =>
       // TODO if !passing return false, no point going further
       passing && ((attribute === 'id')

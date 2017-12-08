@@ -17,7 +17,7 @@ import {
   getMetaField,
   getMarkdownField,
   getMeasureConnectionField,
-  getSdgTargetConnectionField,
+  // getSdgTargetConnectionField,
   getManagerField,
   getScheduleField,
   getReportsField,
@@ -105,7 +105,7 @@ export class IndicatorView extends React.PureComponent { // eslint-disable-line 
       icon: 'connections',
       fields: [
         getMeasureConnectionField(measures, measureTaxonomies, measureConnections, appMessages, onEntityClick),
-        getSdgTargetConnectionField(sdgtargets, sdgtargetTaxonomies, sdgtargetConnections, appMessages, onEntityClick),
+        // getSdgTargetConnectionField(sdgtargets, sdgtargetTaxonomies, sdgtargetConnections, appMessages, onEntityClick),
       ],
     },
   ]);

@@ -43,7 +43,7 @@ const selectMeasures = createSelector(
         .filter((association) => attributesEqual(association.getIn(['attributes', 'measure_id']), id))
         .map((association) => association.getIn(['attributes', 'recommendation_id']))
       )
-      .set('sdgtarget_ids', sdgtargetMeasures
+      .set('sdgtarget_ids', sdgtargetMeasures && sdgtargetMeasures
         .filter((association) => attributesEqual(association.getIn(['attributes', 'measure_id']), id))
         .map((association) => association.getIn(['attributes', 'sdgtarget_id']))
       )
@@ -63,7 +63,7 @@ const selectSdgTargets = createSelector(
   (state) => selectEntities(state, 'sdgtargets'),
   (state) => selectEntities(state, 'sdgtarget_categories'),
   (entities, sdgtargetCategories) =>
-    entities.map((entity, id) => entity.set('category_ids', sdgtargetCategories
+    entities && entities.map((entity, id) => entity.set('category_ids', sdgtargetCategories
       .filter((association) => attributesEqual(association.getIn(['attributes', 'sdgtarget_id']), id))
       .map((association) => association.getIn(['attributes', 'category_id']))
     ))

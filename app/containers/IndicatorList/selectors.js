@@ -49,7 +49,7 @@ export const selectConnections = createSelector(
     )
     .set(
       'sdgtargets',
-      sdgtargets.map((sdgtarget) =>
+      sdgtargets && sdgtargets.map((sdgtarget) =>
         sdgtarget.set(
           'categories',
           sdgtargetCategories
@@ -140,7 +140,7 @@ const selectIndicatorsNested = createSelector(
     )
     .set(
       'sdgtargets',
-      entitySdgTargets
+      entitySdgTargets && entitySdgTargets
       .filter((association) =>
         attributesEqual(association.getIn(['attributes', 'indicator_id']), entity.get('id'))
         && connections.getIn(['sdgtargets', association.getIn(['attributes', 'sdgtarget_id']).toString()])

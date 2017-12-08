@@ -12,11 +12,11 @@ import impactossLogo from 'themes/media/impactoss.png';
 import impactossLogo2x from 'themes/media/impactoss@2x.png';
 
 import partner1 from 'themes/media/partner1.png';
-import partner2 from 'themes/media/partner2.png';
+// import partner2 from 'themes/media/partner2.png';
 import partner3 from 'themes/media/partner3.png';
 import partner4 from 'themes/media/partner4.png';
 import partner1x2x from 'themes/media/partner1@2x.png';
-import partner2x2x from 'themes/media/partner2@2x.png';
+// import partner2x2x from 'themes/media/partner2@2x.png';
 import partner3x2x from 'themes/media/partner3@2x.png';
 import partner4x2x from 'themes/media/partner4@2x.png';
 
@@ -34,7 +34,7 @@ theme.media = {
   // link text and title to be set in translations/[lang].js > app.components.Footer.partners.[]
   partnerLogos: [
     [partner1, partner1x2x],
-    [partner2, partner2x2x],
+    // [partner2, partner2x2x],
     [partner3, partner3x2x],
     [partner4, partner4x2x],
   ],

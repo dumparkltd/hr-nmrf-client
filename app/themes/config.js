@@ -15,7 +15,7 @@
 // default language locale
 export const DEFAULT_LOCALE = 'en-GB';
 // date format - change to format according to locale, only used for form error message
-export const DATE_FORMAT = 'dd/mm/yyyy';
+export const DATE_FORMAT = 'dd/MM/yyyy';
 export const NODE_ENV = sessionStorage.NODE_ENV || 'production';
 
 // UI settings ************************
@@ -52,14 +52,35 @@ export const FOOTER = {
 };
 
 // entitylists items-per-page options
-export const PAGE_ITEM_OPTIONS = [10, 20, 50, 100];
+// export const PAGE_ITEM_OPTIONS = [10, 20, 50, 100, 'all'];
+export const PAGE_ITEM_OPTIONS = [
+  {
+    value: 10,
+  },
+  {
+    value: 20,
+  },
+  {
+    value: 50,
+  },
+  {
+    value: 100,
+  },
+  {
+    value: 'all',
+    message: 'ui.pageItemOptions.all',
+  },
+];
 
 export const TEXT_TRUNCATE = {
   CONNECTION_TAG: 20,
   ATTRIBUTE_TAG: 10,
-  ENTITY_TAG: 10,
+  ENTITY_TAG: 7,
   CONNECTION_POPUP: 80,
   LINK_FIELD: 30,
+  FW_SELECT: 32,
+  GRACE: 2,
+  META_TITLE: 20,
 };
 
 export const PROGRESS_TAXONOMY_ID = 10;
@@ -74,15 +95,15 @@ export const CYCLE_TAXONOMY_ID = 2;
 
 /**
  * Server settings
- **/
+ * */
 
 // General ********************
 
 export const ENDPOINTS = {
   API: (
     NODE_ENV === 'production'
-    ? 'https://impactoss-dev.herokuapp.com/'
-    : 'https://impactoss-dev.herokuapp.com/'
+      ? 'https://impactoss-dev.herokuapp.com'
+      : 'https://impactoss-dev.herokuapp.com'
   ), // server API endpoint
   SIGNING_URL: '/s3/sign', // server AWS S3 signing url endpoint
   SIGN_IN: 'auth/sign_in',
@@ -102,7 +123,7 @@ export const KEYS = {
 };
 
 // database date format
-export const DB_DATE_FORMAT = 'YYYY-MM-DD';
+export const DB_DATE_FORMAT = 'yyyy-MM-dd';
 
 
 // Map server messages *********************************
@@ -177,3 +198,10 @@ export const DB_TABLES = [
   'recommendation_indicators',
   'recommendation_recommendations',
 ];
+
+export const COLUMN_WIDTHS = {
+  FULL: 1,
+  HALF: 0.5,
+  MAIN: 0.72,
+  OTHER: 0.28,
+};

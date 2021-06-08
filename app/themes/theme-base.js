@@ -56,12 +56,12 @@ theme.breakpoints = {
 // 3: white/placeholder
 // 4: white/placeholder
 const primary = coolorsToHex('https://coolors.co/0063b5-0070cc-0077d8-ffffff-ffffff');
-  // secondary color palette: dark to light
-  // 0: secondary colour, dark / white/placeholder
-  // 1: secondary colour, medium / white/placeholder
-  // 2: secondary colour, main / white/placeholder
-  // 3: white/placeholder
-  // 4: white/placeholder
+// secondary color palette: dark to light
+// 0: secondary colour, dark / white/placeholder
+// 1: secondary colour, medium / white/placeholder
+// 2: secondary colour, main / white/placeholder
+// 3: white/placeholder
+// 4: white/placeholder
 const secondary = coolorsToHex('https://coolors.co/ffffff-ffffff-ffffff-ffffff-ffffff');
 // dark grayscale: dark to light
 // 0:  darkest (AA)
@@ -288,6 +288,21 @@ theme.sizes = {
     markdownMobile: '16px',
     small: '13px', // used for labels
     smallMobile: '11px', // used for labels
+    default: '16px', // used for labels
+  },
+  print: {
+    mainListItem: '10pt',
+    nestedListItem: '8pt',
+    listItemTop: '7pt',
+    listItemBottom: '7pt',
+    markdown: '10pt',
+    smallest: '7pt', // used for labels
+    smaller: '8pt', // used for labels
+    small: '9pt', // used for labels
+    default: '10pt', // used for labels
+    large: '11pt', // used for labels
+    larger: '12pt', // used for labels
+    largest: '14pt', // used for labels
   },
   // px only
   aside: {
@@ -301,7 +316,7 @@ theme.sizes = {
   },
   mainListItem: {
     paddingHorizontal: 15,
-    paddingTop: 10,
+    paddingTop: 12,
     paddingBottom: 12,
   },
   header: {
@@ -333,6 +348,10 @@ theme.sizes = {
       titleMobile: '1.4em',
       claim: '1.3em',
       claimMobile: '1em',
+    },
+    print: {
+      title: '2.8em',
+      claim: '1em',
     },
   },
 };

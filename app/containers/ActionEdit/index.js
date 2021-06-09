@@ -170,17 +170,6 @@ export class ActionEdit extends React.Component { // eslint-disable-line react/p
         ],
       },
     );
-    if (indicators) {
-      groups.push(
-        {
-          label: intl.formatMessage(appMessages.nav.indicatorsSuper),
-          icon: 'indicators',
-          fields: [
-            renderIndicatorControl(indicators, onCreateOption),
-          ],
-        },
-      );
-    }
     if (recommendationsByFw) {
       const recConnections = renderRecommendationsByFwControl(
         recommendationsByFw,
@@ -197,6 +186,17 @@ export class ActionEdit extends React.Component { // eslint-disable-line react/p
           },
         );
       }
+    }
+    if (indicators) {
+      groups.push(
+        {
+          label: intl.formatMessage(appMessages.nav.indicatorsSuper),
+          icon: 'indicators',
+          fields: [
+            renderIndicatorControl(indicators, onCreateOption, intl),
+          ],
+        },
+      );
     }
     return groups;
   };

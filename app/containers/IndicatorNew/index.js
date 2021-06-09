@@ -15,14 +15,14 @@ import { Map, List, fromJS } from 'immutable';
 import {
   renderMeasureControl,
   renderRecommendationsByFwControl,
-  renderUserControl,
   getTitleFormField,
   getReferenceFormField,
   getStatusField,
   getMarkdownField,
-  getDateField,
-  getFrequencyField,
-  getCheckboxField,
+  // renderUserControl,
+  // getDateField,
+  // getFrequencyField,
+  // getCheckboxField,
   getConnectionUpdatesFromFormData,
 } from 'utils/forms';
 
@@ -158,42 +158,43 @@ export class IndicatorNew extends React.PureComponent { // eslint-disable-line r
     return groups;
   };
 
-  getBodyAsideFields = (users, repeat) => {
-    const { intl } = this.context;
-    return ([ // fieldGroups
-      { // fieldGroup
-        label: intl.formatMessage(appMessages.entities.due_dates.schedule),
-        icon: 'reminder',
-        fields: [
-          getDateField(
-            intl.formatMessage,
-            'start_date',
-            repeat,
-            repeat ? 'start_date' : 'start_date_only',
-            (model, value) => this.props.onStartDateChange(model, value, this.props.viewDomain.form.data, intl.formatMessage)
-          ),
-          getCheckboxField(
-            intl.formatMessage,
-            'repeat',
-            (model, value) => this.props.onRepeatChange(model, value, this.props.viewDomain.form.data, intl.formatMessage)
-          ),
-          repeat ? getFrequencyField(intl.formatMessage) : null,
-          repeat ? getDateField(
-            intl.formatMessage,
-            'end_date',
-            repeat,
-            'end_date',
-            (model, value) => this.props.onEndDateChange(model, value, this.props.viewDomain.form.data, intl.formatMessage)
-          )
-            : null,
-          renderUserControl(
-            users,
-            intl.formatMessage(appMessages.attributes.manager_id.indicators),
-          ),
-        ],
-      },
-    ]);
-  };
+  getBodyAsideFields = () => [];
+  // getBodyAsideFields = (users, repeat) => {
+  //   const { intl } = this.context;
+  //   return ([ // fieldGroups
+  //     { // fieldGroup
+  //       label: intl.formatMessage(appMessages.entities.due_dates.schedule),
+  //       icon: 'reminder',
+  //       fields: [
+  //         getDateField(
+  //           intl.formatMessage,
+  //           'start_date',
+  //           repeat,
+  //           repeat ? 'start_date' : 'start_date_only',
+  //           (model, value) => this.props.onStartDateChange(model, value, this.props.viewDomain.form.data, intl.formatMessage)
+  //         ),
+  //         getCheckboxField(
+  //           intl.formatMessage,
+  //           'repeat',
+  //           (model, value) => this.props.onRepeatChange(model, value, this.props.viewDomain.form.data, intl.formatMessage)
+  //         ),
+  //         repeat ? getFrequencyField(intl.formatMessage) : null,
+  //         repeat ? getDateField(
+  //           intl.formatMessage,
+  //           'end_date',
+  //           repeat,
+  //           'end_date',
+  //           (model, value) => this.props.onEndDateChange(model, value, this.props.viewDomain.form.data, intl.formatMessage)
+  //         )
+  //           : null,
+  //         renderUserControl(
+  //           users,
+  //           intl.formatMessage(appMessages.attributes.manager_id.indicators),
+  //         ),
+  //       ],
+  //     },
+  //   ]);
+  // };
 
   render() {
     const { intl } = this.context;
@@ -314,9 +315,9 @@ IndicatorNew.propTypes = {
   onCreateOption: PropTypes.func,
   initialiseForm: PropTypes.func,
   connectedTaxonomies: PropTypes.object,
-  onRepeatChange: PropTypes.func,
-  onStartDateChange: PropTypes.func,
-  onEndDateChange: PropTypes.func,
+  // onRepeatChange: PropTypes.func,
+  // onStartDateChange: PropTypes.func,
+  // onEndDateChange: PropTypes.func,
 };
 
 IndicatorNew.contextTypes = {

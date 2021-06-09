@@ -103,12 +103,6 @@ export class RecommendationImport extends React.PureComponent { // eslint-disabl
               data: getImportFields({
                 fields: [
                   {
-                    attribute: 'framework_id',
-                    type: 'number',
-                    required: true,
-                    import: true,
-                  },
-                  {
                     attribute: 'reference',
                     type: 'text',
                     required: true,
@@ -123,16 +117,6 @@ export class RecommendationImport extends React.PureComponent { // eslint-disabl
                   {
                     attribute: 'description',
                     label: 'fullRecommendation',
-                    type: 'markdown',
-                    import: true,
-                  },
-                  {
-                    attribute: 'accepted',
-                    type: 'bool',
-                    import: true,
-                  },
-                  {
-                    attribute: 'response',
                     type: 'markdown',
                     import: true,
                   },
@@ -201,6 +185,7 @@ function mapDispatchToProps(dispatch) {
             attributes: row
               .mapKeys((k) => getColumnAttribute(k))
               .set('draft', true)
+              .set('framework_id', 1)
               .toJS(),
             saveRef: index + 1,
           }));

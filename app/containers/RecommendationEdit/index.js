@@ -23,7 +23,6 @@ import {
   getConnectionUpdatesFromFormData,
   getTitleFormField,
   getReferenceFormField,
-  getAcceptedField,
   getStatusField,
   getMarkdownField,
 } from 'utils/forms';
@@ -154,15 +153,12 @@ export class RecommendationEdit extends React.PureComponent { // eslint-disable-
     measures,
     indicators,
     onCreateOption,
-    hasResponse,
   ) => {
     const { intl } = this.context;
     const groups = [];
     groups.push({
       fields: [
         getMarkdownField(intl.formatMessage, 'description', 'fullRecommendation', 'fullRecommendation', 'fullRecommendation'),
-        hasResponse && getAcceptedField(intl.formatMessage, entity),
-        hasResponse && getMarkdownField(intl.formatMessage, 'response'),
       ],
     });
     if (measures) {

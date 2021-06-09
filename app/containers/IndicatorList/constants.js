@@ -95,26 +95,6 @@ export const CONFIG = {
         options: PUBLISH_STATUSES,
         role: USER_ROLES.CONTRIBUTOR.value,
       },
-      {
-        search: false,
-        edit: false,
-        message: 'attributes.manager_id.indicators',
-        attribute: 'manager_id',
-        role: USER_ROLES.CONTRIBUTOR.value,
-        reference: {
-          key: 'manager',
-          label: 'name',
-          without: true,
-        },
-      },
     ],
   },
-  expandableColumns: [
-    {
-      message: 'entities.progress_reports.plural',
-      type: 'reports',
-      clientPath: 'reports',
-      icon: 'report',
-    },
-  ],
 };

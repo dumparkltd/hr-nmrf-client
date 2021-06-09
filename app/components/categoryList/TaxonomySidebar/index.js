@@ -146,7 +146,7 @@ class TaxonomySidebar extends React.PureComponent { // eslint-disable-line react
                     )
                     }
                   </SidebarHeader>
-                  {taxonomyGroups && map(taxonomyGroups, (group) => (
+                  {taxonomyGroups && map(taxonomyGroups, (group) => group.taxonomies && group.taxonomies.length > 0 ? (
                     <div key={group.id}>
                       <SidebarGroupLabel>
                         {group.frameworkId && (
@@ -174,7 +174,7 @@ class TaxonomySidebar extends React.PureComponent { // eslint-disable-line react
                         ))}
                       </div>
                     </div>
-                  ))}
+                  ) : null)}
                 </Component>
               </Scrollable>
             </Sidebar>

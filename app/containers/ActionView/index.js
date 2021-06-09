@@ -108,16 +108,6 @@ export class ActionView extends React.PureComponent { // eslint-disable-line rea
         // getMarkdownField(entity, 'indicator_summary', true),
       ],
     });
-    // indicators
-    if (indicators) {
-      fields.push({
-        label: appMessages.nav.indicatorsSuper,
-        icon: 'indicators',
-        fields: [
-          getIndicatorConnectionField(indicators, indicatorConnections, onEntityClick),
-        ],
-      });
-    }
     // recs
     if (recommendationsByFw) {
       const recConnections = [];
@@ -140,6 +130,16 @@ export class ActionView extends React.PureComponent { // eslint-disable-line rea
         icon: 'recommendations',
         fields: recConnections,
       });
+      // indicators
+      if (indicators) {
+        fields.push({
+          label: appMessages.nav.indicatorsSuper,
+          icon: 'indicators',
+          fields: [
+            getIndicatorConnectionField(indicators, indicatorConnections, onEntityClick),
+          ],
+        });
+      }
     }
     return fields;
   };

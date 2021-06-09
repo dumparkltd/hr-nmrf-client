@@ -22,8 +22,6 @@ export const FORM_INITIAL = fromJS({
     title: '',
     description: '',
     reference: '',
-    accepted: true,
-    response: '',
     draft: true,
     framework_id: '',
   },

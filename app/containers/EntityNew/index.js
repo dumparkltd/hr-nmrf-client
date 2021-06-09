@@ -11,7 +11,7 @@ import { actions as formActions } from 'react-redux-form/immutable';
 import { Map, List } from 'immutable';
 
 import { getEntityAttributeFields } from 'utils/forms';
-import { qe } from 'utils/quasi-equals';
+// import { qe } from 'utils/quasi-equals';
 import { scrollToTop } from 'utils/scroll-to-component';
 import { hasNewError } from 'utils/entity-form';
 
@@ -96,7 +96,6 @@ export class EntityNew extends React.PureComponent { // eslint-disable-line reac
     const { saveSending, saveError, submitValid } = viewDomain.get('page').toJS();
 
     let pageTitle;
-    let hasResponse;
     let fwSpecified;
     let icon = path;
     if (path === 'categories' && taxonomy && taxonomy.get('attributes')) {
@@ -112,14 +111,14 @@ export class EntityNew extends React.PureComponent { // eslint-disable-line reac
       // check if single framework set
       fwSpecified = (currentFrameworkId && currentFrameworkId !== 'all');
       // get current framework
-      const currentFramework = framework
-        || (
-          fwSpecified
-          && frameworks
-          && frameworks.find((fw) => qe(fw.get('id'), currentFrameworkId))
-        );
+      // const currentFramework = framework
+      //   || (
+      //     fwSpecified
+      //     && frameworks
+      //     && frameworks.find((fw) => qe(fw.get('id'), currentFrameworkId))
+      //   );
       // check if response is required
-      hasResponse = currentFramework && currentFramework.getIn(['attributes', 'has_response']);
+      // hasResponse = currentFramework && currentFramework.getIn(['attributes', 'has_response']);
       // figure out title and icon
       pageTitle = intl.formatMessage(
         messages[path].pageTitle,
@@ -197,7 +196,6 @@ export class EntityNew extends React.PureComponent { // eslint-disable-line reac
                 },
                 recommendations: {
                   frameworks: !fwSpecified ? frameworks : null,
-                  hasResponse,
                 },
               },
               intl,

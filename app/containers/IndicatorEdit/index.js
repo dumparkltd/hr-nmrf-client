@@ -18,15 +18,15 @@ import {
   entityOptions,
   renderMeasureControl,
   renderRecommendationsByFwControl,
-  renderUserControl,
+  // renderUserControl,
   getConnectionUpdatesFromFormData,
   getTitleFormField,
   getReferenceFormField,
   getStatusField,
   getMarkdownField,
-  getDateField,
-  getFrequencyField,
-  getCheckboxField,
+  // getDateField,
+  // getFrequencyField,
+  // getCheckboxField,
 } from 'utils/forms';
 
 import {
@@ -203,43 +203,44 @@ export class IndicatorEdit extends React.Component { // eslint-disable-line reac
     return groups;
   };
 
-  getBodyAsideFields = (entity, users, repeat) => {
-    const { intl } = this.context;
-    return ([ // fieldGroups
-      { // fieldGroup
-        label: intl.formatMessage(appMessages.entities.due_dates.schedule),
-        icon: 'reminder',
-        fields: [
-          getDateField(
-            intl.formatMessage,
-            'start_date',
-            repeat,
-            repeat ? 'start_date' : 'start_date_only',
-            (model, value) => this.props.onStartDateChange(model, value, this.props.viewDomain.form.data, intl.formatMessage)
-          ),
-          getCheckboxField(
-            intl.formatMessage,
-            'repeat',
-            (model, value) => this.props.onRepeatChange(model, value, this.props.viewDomain.form.data, intl.formatMessage)
-          ),
-          repeat ? getFrequencyField(intl.formatMessage, entity) : null,
-          repeat ? getDateField(
-            intl.formatMessage,
-            'end_date',
-            repeat,
-            'end_date',
-            (model, value) => this.props.onEndDateChange(model, value, this.props.viewDomain.form.data, intl.formatMessage)
-          )
-            : null,
-          renderUserControl(
-            users,
-            intl.formatMessage(appMessages.attributes.manager_id.indicators),
-            entity.getIn(['attributes', 'manager_id']),
-          ),
-        ],
-      },
-    ]);
-  };
+  getBodyAsideFields = () => [];
+  // const { intl } = this.context;
+  // return [];
+  //  // fieldGroups
+  // { // fieldGroup
+  // label: intl.formatMessage(appMessages.entities.due_dates.schedule),
+  // icon: 'reminder',
+  // fields: [
+  //   getDateField(
+  //     intl.formatMessage,
+  //     'start_date',
+  //     repeat,
+  //     repeat ? 'start_date' : 'start_date_only',
+  //     (model, value) => this.props.onStartDateChange(model, value, this.props.viewDomain.form.data, intl.formatMessage)
+  //   ),
+  //   getCheckboxField(
+  //     intl.formatMessage,
+  //     'repeat',
+  //     (model, value) => this.props.onRepeatChange(model, value, this.props.viewDomain.form.data, intl.formatMessage)
+  //   ),
+  //   repeat ? getFrequencyField(intl.formatMessage, entity) : null,
+  //   repeat ? getDateField(
+  //     intl.formatMessage,
+  //     'end_date',
+  //     repeat,
+  //     'end_date',
+  //     (model, value) => this.props.onEndDateChange(model, value, this.props.viewDomain.form.data, intl.formatMessage)
+  //   )
+  //     : null,
+  //   renderUserControl(
+  //     users,
+  //     intl.formatMessage(appMessages.attributes.manager_id.indicators),
+  //     entity.getIn(['attributes', 'manager_id']),
+  //   ),
+  // ],
+  // },
+  // ]);
+  // };
 
   render() {
     const { intl } = this.context;

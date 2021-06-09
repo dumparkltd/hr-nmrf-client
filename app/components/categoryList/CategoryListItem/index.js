@@ -237,7 +237,6 @@ class CategoryListItem extends React.PureComponent { // eslint-disable-line reac
               if (!framework) {
                 return null;
               }
-              const hasResponse = !connected && framework.getIn(['attributes', 'has_response']);
               const multipleFWs = col.attribute.frameworkIds.length > 1;
               const totalCount = (total && total[id]) || 0;
               if (totalCount === 0) {
@@ -253,25 +252,13 @@ class CategoryListItem extends React.PureComponent { // eslint-disable-line reac
                       )}
                     </FrameworkLabel>
                   )}
-                  {hasResponse && (
-                    <BarWrap secondary multiple={multipleFWs}>
-                      {this.renderAcceptedBar(
-                        col,
-                        totalCount,
-                        (accepted && accepted[id]) || 0,
-                        multipleFWs, // multiple,
-                      )}
-                    </BarWrap>
-                  )}
-                  {!hasResponse && (
-                    <BarWrap multiple={multipleFWs}>
-                      {this.renderSimpleBar(
-                        col,
-                        totalCount,
-                        multipleFWs, // multiple,
-                      )}
-                    </BarWrap>
-                  )}
+                  <BarWrap multiple={multipleFWs}>
+                    {this.renderSimpleBar(
+                      col,
+                      totalCount,
+                      multipleFWs, // multiple,
+                    )}
+                  </BarWrap>
                 </div>
               );
             })}

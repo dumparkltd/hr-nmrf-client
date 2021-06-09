@@ -113,18 +113,6 @@ export class ActionImport extends React.PureComponent { // eslint-disable-line r
                     import: true,
                   },
                   {
-                    disabled: true,
-                    attribute: 'outcome',
-                    type: 'markdown',
-                    import: true,
-                  },
-                  {
-                    disabled: true,
-                    attribute: 'indicator_summary',
-                    type: 'markdown',
-                    import: true,
-                  },
-                  {
                     attribute: 'target_date',
                     type: 'date',
                     import: true,

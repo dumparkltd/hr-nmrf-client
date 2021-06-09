@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { Map, List } from 'immutable';
+import { Map } from 'immutable';
 
 import {
   selectEntities,
@@ -10,7 +10,7 @@ import {
   selectConnectedCategoryQuery,
   selectSortByQuery,
   selectSortOrderQuery,
-  selectExpandQuery,
+  // selectExpandQuery,
   selectFWTaxonomiesSorted,
   selectFWRecommendations,
   selectFWIndicators,
@@ -27,9 +27,9 @@ import {
   filterEntitiesByCategories,
   filterEntitiesByConnectedCategories,
   filterEntitiesWithoutAssociation,
-  testEntityEntityAssociation,
+  // testEntityEntityAssociation,
   entitiesSetCategoryIds,
-  entitiesSetSingle,
+  // entitiesSetSingle,
   filterTaxonomies,
   getTaxonomyCategories,
 } from 'utils/entities';
@@ -250,130 +250,16 @@ const selectMeasuresByConnectedCategories = createSelector(
     ? filterEntitiesByConnectedCategories(entities, connections, query)
     : entities
 );
-
-const countDueDates = (dates, attr) => dates.filter(
-  (date) => date.getIn(['attributes', attr])
-).size;
-
-const selectMeasuresExpandables = createSelector(
-  (state) => selectReady(state, { path: DEPENDENCIES }),
-  selectMeasuresByConnectedCategories,
-  selectFWIndicators,
-  (state) => selectEntities(state, 'progress_reports'),
-  (state) => selectEntities(state, 'due_dates'),
-  selectExpandQuery,
-  (ready, entities, indicators, reports, dueDates, expandNo) => !ready
-    ? entities
-    : entities.map(
-      (entity) => {
-        // if not expanded
-        if (expandNo <= 0) {
-          // insert expandables:
-          // - indicators
-          // - reports (incl due_dates)
-          const dueDatesAnyIndicator = dueDates.filter(
-            (date) => testEntityEntityAssociation(
-              entity,
-              'indicators',
-              date.getIn(['attributes', 'indicator_id'])
-            )
-          );
-          return entity.set(
-            'expandable',
-            List(['indicators', 'reports']),
-          ).set(
-            'reports',
-            reports.filter(
-              (report) => testEntityEntityAssociation(
-                entity,
-                'indicators',
-                report.getIn(['attributes', 'indicator_id']),
-              )
-            ),
-          ).set(
-            'dates',
-            Map().set(
-              'overdue', countDueDates(dueDatesAnyIndicator, 'overdue'),
-            ).set(
-              'due', countDueDates(dueDatesAnyIndicator, 'due'),
-            )
-          );
-        }
-        const filteredIndicators = indicators.filter(
-          (indicator) => testEntityEntityAssociation(
-            entity,
-            'indicators',
-            indicator.get('id'),
-          )
-        );
-        // insert expanded indicators with expandable reports (incl due_dates)
-        return entity.set(
-          'expanded',
-          'indicatorsExpanded',
-        ).set(
-          'indicatorsExpanded',
-          filteredIndicators.map(
-            (indicator) => {
-              // due dates for indicator
-              const dueDatesForIndicator = dueDates.filter(
-                (date) => qe(
-                  date.getIn(['attributes', 'indicator_id']),
-                  indicator.get('id')
-                )
-              );
-              const reportsForIndicator = reports.filter(
-                (report) => qe(
-                  report.getIn(['attributes', 'indicator_id']),
-                  indicator.get('id')
-                )
-              );
-              if (expandNo === 1) {
-                return indicator.set(
-                  'expandable',
-                  'reports',
-                ).set(
-                  'reports',
-                  reportsForIndicator,
-                ).set(
-                  'dates',
-                  // store counts
-                  Map().set(
-                    'overdue', countDueDates(dueDatesForIndicator, 'overdue'),
-                  ).set(
-                    'due', countDueDates(dueDatesForIndicator, 'due'),
-                  )
-                );
-              }
-              const dueDatesScheduled = dueDatesForIndicator && dueDatesForIndicator.filter(
-                (date) => !date.getIn(['attributes', 'has_progress_report'])
-              );
-              return indicator.set(
-                'expanded',
-                'reports',
-              ).set(
-                'reports',
-                entitiesSetSingle(
-                  reportsForIndicator,
-                  dueDates,
-                  'date',
-                  'due_date_id',
-                )
-              ).set(
-                'dates',
-                // store upcoming scheduled indicator
-                Map().set('scheduled', dueDatesScheduled && sortEntities(
-                  dueDatesScheduled,
-                  'asc',
-                  'due_date',
-                  'date'
-                ).first()),
-              );
-            }
-          )
-        );
-      }
-    )
-);
+//
+// const countDueDates = (dates, attr) => dates.filter(
+//   (date) => date.getIn(['attributes', attr])
+// ).size;
+//
+// const selectMeasuresExpandables = createSelector(
+//   (state) => selectReady(state, { path: DEPENDENCIES }),
+//   selectMeasuresByConnectedCategories,
+//   (ready, entities) => entities
+// );
 
 // kicks off series of cascading selectors
 // 1. selectEntitiesWhere filters by attribute
@@ -384,7 +270,7 @@ const selectMeasuresExpandables = createSelector(
 // 6. selectMeasuresByCategories will filter by specific categories
 // 7. selectMeasuresByCOnnectedCategories will filter by specific categories connected via connection
 export const selectMeasures = createSelector(
-  selectMeasuresExpandables,
+  selectMeasuresByConnectedCategories,
   selectSortByQuery,
   selectSortOrderQuery,
   (entities, sort, order) => {

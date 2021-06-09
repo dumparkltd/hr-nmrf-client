@@ -90,6 +90,7 @@ export class ActionList extends React.PureComponent { // eslint-disable-line rea
         onClick: () => this.props.handleNew(),
       });
     }
+
     return (
       <div>
         <Helmet

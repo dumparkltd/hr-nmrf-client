@@ -2,9 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { palette } from 'styled-theme';
-import { find } from 'lodash/collection';
 import { Map, List } from 'immutable';
-import asList from 'utils/as-list';
 import { COLUMN_WIDTHS } from 'themes/config';
 
 import Messages from 'components/Messages';
@@ -12,7 +10,6 @@ import Component from 'components/styled/Component';
 
 import EntityListItemMain from './EntityListItemMain';
 import EntityListItemSelect from './EntityListItemSelect';
-import EntityListItemExpandable from './EntityListItemExpandable';
 
 import messages from './messages';
 
@@ -61,9 +58,9 @@ class EntityListItem extends React.Component { // eslint-disable-line react/pref
     return this.props.entity !== nextProps.entity
       || this.props.isSelected !== nextProps.isSelected
       || this.props.wrapper !== nextProps.wrapper
-      || this.props.error !== nextProps.error
-      || this.props.expandNo !== nextProps.expandNo;
+      || this.props.error !== nextProps.error;
   }
+  // || this.props.expandNo !== nextProps.expandNo;
 
   transformMessage = (type, msg) => {
     const { intl } = this.context;
@@ -89,9 +86,7 @@ class EntityListItem extends React.Component { // eslint-disable-line react/pref
       entityIcon,
       config,
       taxonomies,
-      onExpand,
       onEntityClick,
-      expandNo,
       entityPath,
       connections,
       error,
@@ -99,7 +94,7 @@ class EntityListItem extends React.Component { // eslint-disable-line react/pref
     } = this.props;
 
     return (
-      <Styled expanded={expandNo > 0}>
+      <Styled>
         { error && error.map((updateError, i) => (
           <Messages
             key={i}
@@ -117,7 +112,7 @@ class EntityListItem extends React.Component { // eslint-disable-line react/pref
           />
         ))}
         <Item error={error}>
-          <MainWrapper expandable={entity.get('expandable')}>
+          <MainWrapper>
             <MainInnerWrapper>
               {isManager
                 && <EntityListItemSelect checked={isSelected} onSelect={onSelect} />
@@ -136,19 +131,6 @@ class EntityListItem extends React.Component { // eslint-disable-line react/pref
               />
             </MainInnerWrapper>
           </MainWrapper>
-          {
-            entity.get('expandable')
-            && asList(entity.get('expandable')).map((attribute, i, list) => (
-              <EntityListItemExpandable
-                key={i}
-                column={find(config.expandableColumns, (col) => col.type === attribute)}
-                count={entity.get(attribute) ? entity.get(attribute).size : 0}
-                dates={attribute === 'reports' ? entity.get('dates').toJS() : null}
-                onClick={() => onExpand(expandNo > i ? i : i + 1)}
-                colWidth={COLUMN_WIDTHS.OTHER / list.size}
-              />
-            ))
-          }
         </Item>
       </Styled>
     );
@@ -164,8 +146,6 @@ EntityListItem.propTypes = {
   isSelected: PropTypes.bool,
   isConnection: PropTypes.bool,
   onSelect: PropTypes.func,
-  expandNo: PropTypes.number,
-  onExpand: PropTypes.func,
   entityIcon: PropTypes.func,
   entityPath: PropTypes.string,
   config: PropTypes.object,
@@ -176,7 +156,6 @@ EntityListItem.propTypes = {
 
 EntityListItem.defaultProps = {
   isSelected: false,
-  expandNo: 0,
 };
 
 EntityListItem.contextTypes = {

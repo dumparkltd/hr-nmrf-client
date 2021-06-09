@@ -17,11 +17,11 @@ import {
   renderTaxonomyControl,
   getTitleFormField,
   getReferenceFormField,
-  getAcceptedField,
+  // getAcceptedField,
   getStatusField,
   getMarkdownField,
   renderIndicatorControl,
-  getFrameworkFormField,
+  // getFrameworkFormField,
 } from 'utils/forms';
 
 import { qe } from 'utils/quasi-equals';
@@ -108,12 +108,11 @@ export class RecommendationNew extends React.PureComponent { // eslint-disable-l
     ));
   }
 
-  getHeaderMainFields = (frameworks) => {
+  getHeaderMainFields = () => {
     const { intl } = this.context;
     return ([ // fieldGroups
       { // fieldGroup
         fields: [
-          frameworks && getFrameworkFormField(intl.formatMessage, frameworks), // required
           getReferenceFormField(intl.formatMessage, true), // required
           getTitleFormField(intl.formatMessage, 'titleText'),
         ],
@@ -133,15 +132,12 @@ export class RecommendationNew extends React.PureComponent { // eslint-disable-l
     measures,
     indicators,
     onCreateOption,
-    hasResponse,
   ) => {
     const { intl } = this.context;
     const groups = [];
     groups.push({
       fields: [
         getMarkdownField(intl.formatMessage, 'description', 'fullRecommendation', 'fullRecommendation', 'fullRecommendation'),
-        hasResponse && getAcceptedField(intl.formatMessage),
-        hasResponse && getMarkdownField(intl.formatMessage, 'response'),
       ],
     });
     if (measures) {

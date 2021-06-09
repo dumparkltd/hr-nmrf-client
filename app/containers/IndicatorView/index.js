@@ -18,9 +18,9 @@ import {
   getMarkdownField,
   getMeasureConnectionField,
   getRecommendationConnectionField,
-  getManagerField,
-  getScheduleField,
-  getReportsField,
+  // getManagerField,
+  // getScheduleField,
+  // getReportsField,
 } from 'utils/fields';
 
 import { qe } from 'utils/quasi-equals';
@@ -105,20 +105,20 @@ export class IndicatorView extends React.PureComponent { // eslint-disable-line 
     recommendationConnections,
     frameworks,
   ) => {
-    const { intl } = this.context;
+    // const { intl } = this.context;
     const fields = [];
     // own attributes
     fields.push({
       fields: [
         getMarkdownField(entity, 'description', true),
-        getReportsField(
-          reports,
-          {
-            type: 'add',
-            title: intl.formatMessage(messages.addReport),
-            onClick: this.props.handleNewReport,
-          }
-        ),
+        // getReportsField(
+        //   reports,
+        //   {
+        //     type: 'add',
+        //     title: intl.formatMessage(messages.addReport),
+        //     onClick: this.props.handleNewReport,
+        //   }
+        // ),
       ],
     });
     // measures
@@ -162,21 +162,21 @@ export class IndicatorView extends React.PureComponent { // eslint-disable-line 
     return fields;
   };
 
-  getBodyAsideFields = (entity, dates) => ([ // fieldGroups
-    { // fieldGroup
-      label: appMessages.entities.due_dates.schedule,
-      type: 'dark',
-      icon: 'reminder',
-      fields: [
-        getScheduleField(dates),
-        getManagerField(
-          entity,
-          appMessages.attributes.manager_id.indicators,
-          appMessages.attributes.manager_id.indicatorsEmpty
-        ),
-      ],
-    },
-  ]);
+  // getBodyAsideFields = (entity, dates) => ([ // fieldGroups
+  //   { // fieldGroup
+  //     label: appMessages.entities.due_dates.schedule,
+  //     type: 'dark',
+  //     icon: 'reminder',
+  //     fields: [
+  //       getScheduleField(dates),
+  //       getManagerField(
+  //         entity,
+  //         appMessages.attributes.manager_id.indicators,
+  //         appMessages.attributes.manager_id.indicatorsEmpty
+  //       ),
+  //     ],
+  //   },
+  // ]);
 
   render() {
     const { intl } = this.context;
@@ -187,7 +187,7 @@ export class IndicatorView extends React.PureComponent { // eslint-disable-line 
       isManager,
       measures,
       reports,
-      dates,
+      // dates,
       measureTaxonomies,
       onEntityClick,
       measureConnections,
@@ -206,11 +206,11 @@ export class IndicatorView extends React.PureComponent { // eslint-disable-line 
       });
       buttons = isManager
         ? buttons.concat([
-          {
-            type: 'text',
-            title: intl.formatMessage(messages.addReport),
-            onClick: this.props.handleNewReport,
-          },
+          // {
+          //   type: 'text',
+          //   title: intl.formatMessage(messages.addReport),
+          //   onClick: this.props.handleNewReport,
+          // },
           {
             type: 'edit',
             onClick: () => this.props.handleEdit(this.props.params.id),
@@ -298,7 +298,7 @@ export class IndicatorView extends React.PureComponent { // eslint-disable-line 
                       recommendationConnections,
                       frameworks,
                     ),
-                    aside: isContributor ? this.getBodyAsideFields(viewEntity, dates) : null,
+                    // aside: isContributor ? this.getBodyAsideFields(viewEntity, dates) : null,
                   },
                 }}
               />
